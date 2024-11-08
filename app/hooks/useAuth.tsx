@@ -40,7 +40,11 @@ export const useAuth = () => {
 
   const signInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      
+      // Set a session cookie
+      document.cookie = `__session=${await result.user.getIdToken()}; path=/`;
+      
     } catch (error) {
       console.error("Google sign-in error:", error);
     }
@@ -48,8 +52,10 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      setUser(null);
       await signOut(auth);
+      // Clear the session cookie
+      document.cookie = '__session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      setUser(null);
       return true;
     } catch (error) {
       console.error('Error signing out:', error);

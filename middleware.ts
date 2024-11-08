@@ -2,17 +2,23 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  // Check for auth token in cookies
-  const token = request.cookies.get('auth')?.value
+  // Allow access to login and landing page
+  const { pathname } = request.nextUrl
   
-  if (!token) {
+  if (pathname === '/' || pathname === '/login' || pathname === '/onboarding') {
+    return NextResponse.next()
+  }
+
+  // Check for Firebase Auth Session Cookie
+  const session = request.cookies.get('__session')?.value
+
+  if (!session) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
- 
+
   return NextResponse.next()
 }
 
-// Configure which routes to protect
 export const config = {
   matcher: [
     '/dashboard/:path*',
