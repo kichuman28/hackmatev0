@@ -1,16 +1,26 @@
 'use client'
 
-import "@/app/globals.css";
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
-import { db } from '@/app/lib/firebaseConfig';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { motion } from 'framer-motion';
+import { db, storage } from '@/app/lib/firebaseConfig';
+import { Sparkles, Users, Filter } from 'lucide-react';
 import { Button } from "@/app/components/ui/button";
 import { TeamCard } from "@/app/components/TeamCard";
 import { TeamFiltersSection } from "@/app/components/TeamFilters";
-import { UserProfile, TeamFilters } from "@/app/types/team";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/app/components/ui/sheet";
+import { Skeleton } from "@/app/components/ui/skeleton";
+import { collection } from 'firebase/firestore';
 import { useToast } from "@/app/components/ui/use-toast";
+import { TeamFilters, UserProfile } from '@/app/types/team';
+import { getDocs, where, query } from 'firebase/firestore';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -79,66 +89,146 @@ export default function Dashboard() {
     }
   }, [user, filters, fetchUsers]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
 
-  if (!user) {
-    return <div>Signing you out...</div>;
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 px-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="p-4 rounded-xl border border-purple-500/20 bg-black/30">
+              <div className="flex items-center space-x-4 mb-4">
+                <Skeleton className="h-12 w-12 rounded-full bg-purple-500/20" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[200px] bg-purple-500/20" />
+                  <Skeleton className="h-4 w-[150px] bg-purple-500/20" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-full bg-purple-500/20" />
+                <Skeleton className="h-4 w-2/3 bg-purple-500/20" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
-      <main className="container mx-auto px-4 pt-24">
+    <div className="min-h-screen">
+      <div className="gradient-dark-bg" />
+      
+      <main className="relative container mx-auto px-4 pt-24 z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col gap-6 mb-12"
+          >
             <div>
-              <h1 className="text-4xl font-bold">Find Your Dream Team</h1>
-              <p className="text-gray-600 mt-2">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text flex items-center gap-2">
+                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8" />
+                Find Your Dream Team
+              </h1>
+              <p className="text-gray-400 mt-2 text-base sm:text-lg">
                 Connect with other hackers and build something amazing together
               </p>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => router.push('/my-connections')}
-            >
-              View Connections
-            </Button>
-          </div>
-          
-          <TeamFiltersSection 
-            filters={filters}
-            onFilterChange={setFilters}
-          />
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="w-full sm:w-auto border-purple-500/30 hover:border-purple-500/50 text-white"
+                  >
+                    <Filter className="mr-2 h-4 w-4" />
+                    Filters
+                  </Button>
+                </SheetTrigger>
+                <SheetContent 
+                  side="right" 
+                  className="w-full sm:w-[400px] bg-black/95 border-purple-500/30"
+                >
+                  <SheetHeader>
+                    <SheetTitle className="text-white">Filter Hackers</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-6">
+                    <TeamFiltersSection 
+                      filters={filters}
+                      onFilterChange={setFilters}
+                    />
+                  </div>
+                </SheetContent>
+              </Sheet>
+
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto border-purple-500/30 hover:border-purple-500/50 text-white"
+                onClick={() => router.push('/my-connections')}
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Connections
+              </Button>
+            </div>
+          </motion.div>
 
           {error ? (
-            <div className="text-center py-8">
-              <p className="text-red-600">Error: {error}</p>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-8"
+            >
+              <p className="text-red-400">Error: {error}</p>
               <Button 
                 variant="outline" 
                 onClick={() => {
                   setError(null);
                   fetchUsers();
                 }}
-                className="mt-4"
+                className="mt-4 border-purple-500/30 hover:border-purple-500/50"
               >
                 Try Again
               </Button>
-            </div>
+            </motion.div>
           ) : users.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600">No users found matching your criteria</p>
-            </div>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-8"
+            >
+              <p className="text-gray-400">No users found matching your criteria</p>
+            </motion.div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div 
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
               {users.map((profile) => (
-                <TeamCard
-                  key={profile.id}
-                  profile={profile}
-                  currentUserId={user.uid}
-                />
+                <motion.div key={profile.id} variants={item}>
+                  <TeamCard
+                    profile={profile}
+                    currentUserId={user?.uid || ''}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </main>

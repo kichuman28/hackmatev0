@@ -82,75 +82,104 @@ export const TeamCard = ({ profile, currentUserId }: TeamCardProps) => {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden border-purple-500/20 bg-black/30 backdrop-blur-lg hover:border-purple-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10 h-[400px] flex flex-col">
       <CardHeader className="flex flex-row items-center gap-4">
-        <Avatar className="h-12 w-12">
+        <Avatar className="h-12 w-12 ring-2 ring-purple-500/20">
           <AvatarImage src={profile.photoUrl} alt={profile.name} />
-          <AvatarFallback>{profile.name[0]}</AvatarFallback>
+          <AvatarFallback className="bg-purple-500/20">{profile.name[0]}</AvatarFallback>
         </Avatar>
-        <div className="flex-1">
-          <CardTitle className="text-xl">
-            <Link href={`/profile/${profile.id}`} className="hover:underline">
+        <div className="flex-1 min-w-0">
+          <CardTitle className="text-xl text-white truncate">
+            <Link href={`/profile/${profile.id}`} className="hover:text-purple-400 transition-colors">
               {profile.name}
             </Link>
           </CardTitle>
-          <p className="text-sm text-muted-foreground">{profile.college}</p>
+          <p className="text-sm text-gray-400 truncate">{profile.college}</p>
         </div>
-        <Badge variant="outline">{profile.experienceLevel}</Badge>
+        <Badge variant="outline" className="border-purple-500/30 text-purple-200 shrink-0">
+          {profile.experienceLevel}
+        </Badge>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent className="flex-1 flex flex-col">
+        <div className="space-y-4 flex-1">
           <div>
-            <p className="text-sm font-medium mb-2">Role</p>
-            <Badge variant="secondary">{profile.role}</Badge>
+            <p className="text-sm font-medium mb-2 text-gray-400">Role</p>
+            <Badge variant="secondary" className="bg-purple-500/10 text-purple-200">
+              {profile.role}
+            </Badge>
           </div>
 
           <div>
-            <p className="text-sm font-medium mb-2">Skills</p>
+            <p className="text-sm font-medium mb-2 text-gray-400">Skills</p>
             <div className="flex flex-wrap gap-2">
-              {skillsArray.map((skill, i) => (
-                <Badge key={i} variant="outline">{skill}</Badge>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium mb-2">Project Interests</p>
-            <div className="flex flex-wrap gap-2">
-              {profile.projectInterests?.map((interest, i) => (
-                <Badge key={i} variant="secondary">{interest}</Badge>
-              ))}
-            </div>
-          </div>
-
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full" disabled={isLoading}>
-                Connect
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Connect with {profile.name}</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <Textarea
-                  placeholder="Write a message introducing yourself and why you'd like to team up..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="min-h-[100px]"
-                />
-                <Button 
-                  onClick={handleConnect} 
-                  className="w-full"
-                  disabled={isLoading || !message.trim()}
+              {skillsArray.slice(0, 3).map((skill, i) => (
+                <Badge 
+                  key={i} 
+                  variant="outline"
+                  className="border-purple-500/30 text-purple-200 hover:bg-purple-500/10"
                 >
-                  {isLoading ? "Sending..." : "Send Request"}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+                  {skill}
+                </Badge>
+              ))}
+              {skillsArray.length > 3 && (
+                <Badge variant="outline" className="border-purple-500/30 text-purple-200">
+                  +{skillsArray.length - 3} more
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium mb-2 text-gray-400">Project Interests</p>
+            <div className="flex flex-wrap gap-2">
+              {profile.projectInterests?.slice(0, 3).map((interest, i) => (
+                <Badge 
+                  key={i} 
+                  variant="secondary"
+                  className="bg-purple-500/10 text-purple-200"
+                >
+                  {interest}
+                </Badge>
+              ))}
+              {(profile.projectInterests?.length || 0) > 3 && (
+                <Badge variant="secondary" className="bg-purple-500/10 text-purple-200">
+                  +{profile.projectInterests!.length - 3} more
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
+
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              className="w-full bg-gradient-to-r from-[#52057B] to-[#892CDC] hover:from-[#892CDC] hover:to-[#BC6FF1] text-white mt-4"
+              disabled={isLoading}
+            >
+              Connect
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-black/95 border-purple-500/30">
+            <DialogHeader>
+              <DialogTitle className="text-white">Connect with {profile.name}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Textarea
+                placeholder="Write a message introducing yourself and why you'd like to team up..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="min-h-[100px] bg-black/50 border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
+              />
+              <Button 
+                onClick={handleConnect} 
+                className="w-full bg-gradient-to-r from-[#52057B] to-[#892CDC] hover:from-[#892CDC] hover:to-[#BC6FF1] text-white"
+                disabled={isLoading || !message.trim()}
+              >
+                {isLoading ? "Sending..." : "Send Request"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
