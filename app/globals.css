@@ -58,6 +58,26 @@
   .feature-card:hover::before {
     @apply opacity-100;
   }
+
+  .select-content {
+    @apply bg-black/90 border-purple-500/30;
+  }
+  
+  .select-item {
+    @apply text-white hover:bg-purple-500/20;
+  }
+  
+  input, textarea, select {
+    @apply text-white placeholder:text-gray-500 bg-black/20;
+  }
+  
+  .select-trigger {
+    @apply text-white border-purple-500/30 bg-black/20;
+  }
+  
+  label {
+    @apply text-gray-200;
+  }
 }
 
 /* Custom animation for gradient movement */
