@@ -106,40 +106,54 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-24 px-4">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="p-4 rounded-xl border border-purple-500/20 bg-black/30">
-              <div className="flex items-center space-x-4 mb-4">
-                <Skeleton className="h-12 w-12 rounded-full bg-purple-500/20" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[200px] bg-purple-500/20" />
-                  <Skeleton className="h-4 w-[150px] bg-purple-500/20" />
+      <div className="min-h-screen relative">
+        <div className="gradient-dark-bg" />
+        <div className="relative z-10 pt-24 px-4">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="p-4 rounded-xl border border-purple-500/20 bg-black/30">
+                <div className="flex items-center space-x-4 mb-4">
+                  <Skeleton className="h-12 w-12 rounded-full bg-purple-500/20" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[200px] bg-purple-500/20" />
+                    <Skeleton className="h-4 w-[150px] bg-purple-500/20" />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <Skeleton className="h-4 w-full bg-purple-500/20" />
+                  <Skeleton className="h-4 w-2/3 bg-purple-500/20" />
                 </div>
               </div>
-              <div className="space-y-3">
-                <Skeleton className="h-4 w-full bg-purple-500/20" />
-                <Skeleton className="h-4 w-2/3 bg-purple-500/20" />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       <div className="gradient-dark-bg" />
       
-      <main className="relative container mx-auto px-4 pt-24 z-10">
-        <div className="max-w-7xl mx-auto">
+      <motion.div 
+        className="absolute inset-0 -z-10 overflow-hidden pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-[#52057B] rounded-full mix-blend-multiply filter blur-[64px] sm:blur-[128px] opacity-50" />
+        <div className="absolute top-1/3 right-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-[#892CDC] rounded-full mix-blend-multiply filter blur-[64px] sm:blur-[128px] opacity-50" />
+        <div className="absolute bottom-1/4 left-1/3 w-48 h-48 sm:w-96 sm:h-96 bg-[#BC6FF1] rounded-full mix-blend-multiply filter blur-[64px] sm:blur-[128px] opacity-50" />
+      </motion.div>
+
+      <main className="relative z-10 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col gap-6 mb-12"
+            className="flex flex-col gap-6 mb-8"
           >
-            <div>
+            <div className="max-w-4xl">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text flex items-center gap-2">
                 <Sparkles className="h-6 w-6 sm:h-8 sm:w-8" />
                 Find Your Dream Team
