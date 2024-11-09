@@ -16,6 +16,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { Badge } from "@/app/components/ui/badge";
+import { MessageSquare, Clock, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface ChatUser {
   id: string;
@@ -110,15 +113,18 @@ export default function ChatsPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
-        <div className="text-center bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
-          <p className="text-gray-600 text-lg">Please sign in to view your messages</p>
-          <Link 
-            href="/login"
-            className="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors"
-          >
-            Sign In
-          </Link>
+      <div className="min-h-screen relative">
+        <div className="gradient-dark-bg" />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-center p-8 rounded-xl border border-purple-500/20 bg-black/30 backdrop-blur-lg">
+            <p className="text-gray-300 text-lg mb-6">Please sign in to view your messages</p>
+            <Link 
+              href="/login"
+              className="primary-button inline-flex items-center"
+            >
+              Sign In
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -126,94 +132,123 @@ export default function ChatsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center">
-        <div className="text-center bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 text-lg">Loading conversations...</p>
+      <div className="min-h-screen relative">
+        <div className="gradient-dark-bg" />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-center p-8 rounded-xl border border-purple-500/20 bg-black/30 backdrop-blur-lg">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+            <p className="mt-4 text-gray-300 text-lg">Loading conversations...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
-      <div className="container mx-auto pt-24 px-4 pb-12">
-        <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-          <div className="p-6 border-b bg-white/90">
-            <div className="flex justify-between items-center">
-              <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
-              <span className="text-sm text-gray-500">{chatUsers.length} conversations</span>
-            </div>
-          </div>
-          
-          <div className="divide-y divide-gray-100">
-            {chatUsers.length === 0 ? (
-              <div className="p-12 text-center">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <p className="text-gray-500 text-lg mb-4">No messages yet</p>
-                <p className="text-sm text-gray-400 mb-6">
-                  Start a conversation by discovering other hackers!
-                </p>
-                <Link 
-                  href="/discover"
-                  className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-all transform hover:scale-105"
-                >
-                  <span>Discover Hackers</span>
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
+    <div className="min-h-screen relative">
+      <div className="gradient-dark-bg" />
+      
+      {/* Abstract Gradient Shapes */}
+      <motion.div 
+        className="absolute inset-0 -z-10 overflow-hidden pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-[#52057B] rounded-full mix-blend-multiply filter blur-[64px] sm:blur-[128px] opacity-50" />
+        <div className="absolute top-1/3 right-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-[#892CDC] rounded-full mix-blend-multiply filter blur-[64px] sm:blur-[128px] opacity-50" />
+        <div className="absolute bottom-1/4 left-1/3 w-48 h-48 sm:w-96 sm:h-96 bg-[#BC6FF1] rounded-full mix-blend-multiply filter blur-[64px] sm:blur-[128px] opacity-50" />
+      </motion.div>
+
+      <main className="relative z-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-xl border border-purple-500/20 bg-black/30 backdrop-blur-lg overflow-hidden"
+          >
+            <div className="p-6 border-b border-purple-500/20 bg-black/40">
+              <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold gradient-text flex items-center gap-2">
+                  <MessageSquare className="h-6 w-6" />
+                  Messages
+                </h1>
+                <Badge variant="outline" className="border-purple-500/30 text-purple-200">
+                  {chatUsers.length} conversations
+                </Badge>
               </div>
-            ) : (
-              chatUsers.map((chatUser) => (
-                <div
-                  key={chatUser.id}
-                  onClick={() => handleChatSelect(chatUser.id)}
-                  className="p-4 hover:bg-white/60 cursor-pointer transition-all duration-300 group"
+            </div>
+            
+            <div className="divide-y divide-purple-500/10">
+              {chatUsers.length === 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="p-12 text-center"
                 >
-                  <div className="flex items-center space-x-4">
-                    <Avatar className="h-12 w-12 ring-2 ring-offset-2 ring-transparent group-hover:ring-indigo-600 transition-all">
-                      <AvatarImage src={chatUser.photoUrl} />
-                      <AvatarFallback className="bg-indigo-100 text-indigo-600 font-medium">
-                        {chatUser.name[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-baseline">
-                        <h3 className="text-sm font-semibold text-gray-900 truncate group-hover:text-indigo-600 transition-colors">
-                          {chatUser.name}
-                        </h3>
-                        {chatUser.lastMessageTime && (
-                          <span className="text-xs text-gray-500 flex items-center">
-                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {formatLastMessageTime(chatUser.lastMessageTime)}
-                          </span>
+                  <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MessageSquare className="w-8 h-8 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-2">No messages yet</h3>
+                  <p className="text-gray-400 mb-6">
+                    Start a conversation by discovering other hackers!
+                  </p>
+                  <Link 
+                    href="/discover"
+                    className="primary-button inline-flex items-center gap-2"
+                  >
+                    Discover Hackers
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </motion.div>
+              ) : (
+                chatUsers.map((chatUser) => (
+                  <motion.div
+                    key={chatUser.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    whileHover={{ backgroundColor: 'rgba(0,0,0,0.4)' }}
+                    onClick={() => handleChatSelect(chatUser.id)}
+                    className="p-4 cursor-pointer transition-all duration-300 group"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <Avatar className="h-12 w-12 ring-2 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all">
+                        <AvatarImage src={chatUser.photoUrl} />
+                        <AvatarFallback className="bg-purple-500/20 text-purple-200">
+                          {chatUser.name[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-baseline">
+                          <h3 className="text-base font-semibold text-white truncate group-hover:text-purple-400 transition-colors">
+                            {chatUser.name}
+                          </h3>
+                          {chatUser.lastMessageTime && (
+                            <span className="text-xs text-gray-400 flex items-center">
+                              <Clock className="w-3 h-3 mr-1" />
+                              {formatLastMessageTime(chatUser.lastMessageTime)}
+                            </span>
+                          )}
+                        </div>
+                        {chatUser.lastMessage && (
+                          <p className="text-sm text-gray-400 truncate mt-1">
+                            {chatUser.lastMessage}
+                          </p>
                         )}
                       </div>
-                      {chatUser.lastMessage && (
-                        <p className="text-sm text-gray-500 truncate mt-1">
-                          {chatUser.lastMessage}
-                        </p>
-                      )}
+                      {chatUser.unreadCount ? (
+                        <Badge className="bg-purple-500 hover:bg-purple-600">
+                          {chatUser.unreadCount}
+                        </Badge>
+                      ) : null}
                     </div>
-                    {chatUser.unreadCount ? (
-                      <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-indigo-600 text-white text-xs font-medium">
-                        {chatUser.unreadCount}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </main>
     </div>
   );
 } 
