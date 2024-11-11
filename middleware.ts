@@ -2,17 +2,10 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  // Allow access to login and landing page
   const { pathname } = request.nextUrl
-  
-  if (pathname === '/' || pathname === '/login' || pathname === '/onboarding') {
-    return NextResponse.next()
-  }
-
-  // Check for Firebase Auth Session Cookie
   const session = request.cookies.get('__session')?.value
 
-  if (!session) {
+  if (!session && pathname !== '/' && pathname !== '/login') {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 

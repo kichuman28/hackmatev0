@@ -199,196 +199,173 @@ const ProfileView: React.FC<ProfileViewProps> = ({ profile, user, onEdit }) => {
   );
 };
 
+const IncompleteProfile: React.FC = () => {
+  const router = useRouter();
+  
+  return (
+    <div className="min-h-screen relative">
+      <div className="gradient-dark-bg" />
+      <div className="relative z-10">
+        <div className="max-w-7xl mx-auto px-4 py-36">
+          <Card className="max-w-2xl mx-auto p-8 bg-black/30 backdrop-blur-lg border-[#52057B]/20">
+            <div className="text-center space-y-6">
+              <h1 className="text-4xl font-bold gradient-text">Complete Your Profile</h1>
+              <p className="text-gray-400 text-lg">
+                Hey there, fellow hacker! 👋 Your profile is looking a bit empty. 
+                Let's fix that and help you connect with amazing teammates!
+              </p>
+              <div className="space-y-4">
+                <Button 
+                  onClick={() => router.push('/onboarding')}
+                  className="primary-button text-lg px-8 py-6"
+                >
+                  Get Started
+                </Button>
+                <p className="text-sm text-gray-500">
+                  This will only take a few minutes
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function ProfilePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [profile, setProfile] = useState<ProfileData>({
-    name: '',
-    bio: '',
-    skills: '',
-    college: '',
-    course: '',
-    semester: '',
-    branch: '',
-    linkedIn: '',
-    github: '',
-    role: '',
-    followers: 0,
-    following: 0,
-    projects: [],
-    teamStatus: '',
-    projectInterests: [],
-    experienceLevel: '',
-    availabilityPreference: '',
-    communicationPreference: [],
-    preferredTeamSize: '',
-    hackathonInterests: [],
-  });
+  const { toast } = useToast();
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    if (user) {
-      const getProfile = async () => {
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data() as ProfileData;
-          setProfile({
-            ...data,
-            name: data.name || user.displayName || 'Anonymous User',
-            projects: data.projects || [],
-          });
-        } else {
-          setProfile(prev => ({ 
-            ...prev, 
-            name: user.displayName || 'Anonymous User',
-            projects: [],
-          }));
-        }
-      };
-
-      getProfile();
-    }
-  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setProfile(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setProfile(prev => prev ? ({ ...prev, [name]: value }) : null);
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setProfile(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleSelectChange = (field: keyof ProfileData, value: string) => {
+    setProfile(prev => prev ? ({ ...prev, [field]: value }) : null);
   };
 
   const handleProjectChange = (index: number, field: string, value: string) => {
-    const updatedProjects = [...profile.projects];
-    updatedProjects[index] = { ...updatedProjects[index], [field]: value };
-    setProfile({ ...profile, projects: updatedProjects });
+    setProfile(prev => {
+      if (!prev) return null;
+      const newProjects = [...prev.projects];
+      newProjects[index] = { ...newProjects[index], [field]: value };
+      return { ...prev, projects: newProjects };
+    });
   };
 
   const addProject = () => {
-    setProfile({ ...profile, projects: [...profile.projects, { description: '', github: '', deployed: '' }] });
+    setProfile(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        projects: [...prev.projects, { description: '', github: '', deployed: '' }]
+      };
+    });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const toggleArrayField = (field: keyof ProfileData, value: string) => {
+    setProfile(prev => {
+      if (!prev) return null;
+      const array = prev[field] as string[];
+      return {
+        ...prev,
+        [field]: array.includes(value)
+          ? array.filter(item => item !== value)
+          : [...array, value]
+      };
+    });
+  };
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0]) return;
+    const file = e.target.files[0];
+    
+    if (file.size > 5 * 1024 * 1024) { // 5MB
+      toast({
+        title: "Error",
+        description: "Image size should be less than 5MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const photoRef = ref(storage, `profile-photos/${user!.uid}`);
+      await uploadBytes(photoRef, file);
+      const photoUrl = await getDownloadURL(photoRef);
+      setProfile(prev => prev ? ({ ...prev, photoUrl }) : null);
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload photo",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!user || !profile) return;
     setIsSubmitting(true);
 
     try {
-      const userDocRef = doc(db, 'users', user!.uid);
-      await setDoc(userDocRef, {
+      await setDoc(doc(db, 'users', user.uid), {
         ...profile,
-        projectInterests: profile.projectInterests || [],
-        hackathonInterests: profile.hackathonInterests || [],
-        communicationPreference: profile.communicationPreference || [],
-      }, { merge: true });
-
+        onboardingCompleted: true
+      });
+      
+      setIsEditing(false);
       toast({
         title: "Success",
         description: "Profile updated successfully",
       });
-      setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({
         title: "Error",
         description: "Failed to update profile",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const toggleArrayField = (field: keyof ProfileData, itemValue: string) => {
-    setProfile(prev => {
-      const array = prev[field] as string[] || [];
-      return {
-        ...prev,
-        [field]: array.includes(itemValue)
-          ? array.filter(item => item !== itemValue)
-          : [...array, itemValue]
-      };
-    });
-  };
-
-  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      
-      // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-      if (!allowedTypes.includes(file.type)) {
-        toast({
-          title: "Error",
-          description: "Please upload a valid image file (JPEG, JPG, or PNG)",
-          variant: "destructive",
-        });
-        return;
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        const docRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists() && docSnap.data().onboardingCompleted) {
+          setProfile(docSnap.data() as ProfileData);
+        }
       }
+      setIsLoading(false);
+    };
 
-      // Validate file size (5MB max)
-      const maxSize = 5 * 1024 * 1024;
-      if (file.size > maxSize) {
-        toast({
-          title: "Error",
-          description: "Image size should be less than 5MB",
-          variant: "destructive",
-        });
-        return;
-      }
+    fetchProfile();
+  }, [user]);
 
-      try {
-        // Upload to Firebase Storage
-        const storageRef = ref(storage, `profile-photos/${user!.uid}`);
-        await uploadBytes(storageRef, file);
-        const photoUrl = await getDownloadURL(storageRef);
-
-        // Update profile with new photo URL
-        setProfile(prev => ({
-          ...prev,
-          photoUrl
-        }));
-
-        // Update Firestore
-        const userDocRef = doc(db, 'users', user!.uid);
-        await setDoc(userDocRef, { photoUrl }, { merge: true });
-
-        toast({
-          title: "Success",
-          description: "Profile photo updated successfully",
-        });
-      } catch (error) {
-        console.error("Error uploading photo:", error);
-        toast({
-          title: "Error",
-          description: "Failed to upload profile photo",
-          variant: "destructive",
-        });
-      }
-    }
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (loading || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto" />
+          <p className="text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    );
   }
 
-  if (!user) {
-    return null;
+  if (!profile) {
+    return <IncompleteProfile />;
   }
 
   return (
@@ -674,7 +651,9 @@ export default function ProfilePage() {
                 </div>
               </div>
             ) : (
-              <ProfileView profile={profile} user={user} onEdit={() => setIsEditing(true)} />
+              user && (
+                <ProfileView profile={profile} user={user} onEdit={() => setIsEditing(true)} />
+              )
             )}
           </div>
         </div>

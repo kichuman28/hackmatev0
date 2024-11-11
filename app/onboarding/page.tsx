@@ -372,8 +372,8 @@ const OnboardingPage: React.FC = () => {
       await setDoc(doc(db, 'users', user!.uid), onboardingData, { merge: true });
       
       toast({
-        title: "Success",
-        description: "Onboarding completed successfully",
+        title: "Success!",
+        description: "Your profile has been completed successfully",
       });
 
       router.push('/profile');
@@ -381,7 +381,7 @@ const OnboardingPage: React.FC = () => {
       console.error("Error completing onboarding:", error);
       toast({
         title: "Error",
-        description: "Failed to complete onboarding",
+        description: "Failed to complete profile",
         variant: "destructive",
       });
     } finally {
