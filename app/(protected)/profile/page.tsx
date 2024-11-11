@@ -6,14 +6,13 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Textarea } from "@/app/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Card } from "@/app/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
 import { Badge } from "@/app/components/ui/badge";
-import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 import { useToast } from "@/app/components/ui/use-toast";
-import { TEAM_STATUS, EXPERIENCE_LEVELS, PROJECT_INTERESTS, TEAM_SIZES, HACKATHON_INTERESTS, COMMUNICATION_PREFERENCES } from '@/app/constants';
+import { TEAM_STATUS, EXPERIENCE_LEVELS, PROJECT_INTERESTS, HACKATHON_INTERESTS } from '@/app/constants';
 import { getDownloadURL, uploadBytes, ref } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 
@@ -212,7 +211,7 @@ const IncompleteProfile: React.FC = () => {
               <h1 className="text-4xl font-bold gradient-text">Complete Your Profile</h1>
               <p className="text-gray-400 text-lg">
                 Hey there, fellow hacker! 👋 Your profile is looking a bit empty. 
-                Let's fix that and help you connect with amazing teammates!
+                Let&apos;s fix that and help you connect with amazing teammates!
               </p>
               <div className="space-y-4">
                 <Button 
@@ -235,7 +234,7 @@ const IncompleteProfile: React.FC = () => {
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
-  const router = useRouter();
+  // const router = useRouter();
   const { toast } = useToast();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);

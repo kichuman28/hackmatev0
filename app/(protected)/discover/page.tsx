@@ -5,10 +5,9 @@ import { useAuth } from '@/app/hooks/useAuth';
 import { db } from '@/app/lib/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 import { Card } from "@/app/components/ui/card";
-import { Search, Users, Filter } from 'lucide-react';
+import { Search, Users } from 'lucide-react';
 import { Input } from "@/app/components/ui/input";
 import UserProfileModal from "@/app/components/UserProfileModal";
-import { Button } from '@/app/components/ui/button';
 import { useState, useEffect } from 'react';
 
 interface UserProfile {

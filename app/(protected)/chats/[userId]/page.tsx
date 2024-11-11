@@ -15,7 +15,7 @@ import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { Smile, Send, ArrowLeft, MoreVertical, Image, Paperclip } from 'lucide-react';
+import { Smile, Send, ArrowLeft, MoreVertical, Paperclip } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,6 +46,12 @@ interface UserProfile {
 interface MessageGroup {
   date: string;
   messages: Message[];
+}
+
+// Add this interface for emoji selection
+interface EmojiSelectData {
+  native: string;
+  // Add other properties if needed
 }
 
 export default function ChatPage() {
@@ -160,12 +166,8 @@ export default function ChatPage() {
     }
   };
 
-  const formatMessageTime = (timestamp: Timestamp) => {
-    if (!timestamp) return '';
-    return format(timestamp.toDate(), 'h:mm a');
-  };
-
-  const onEmojiSelect = (emoji: any) => {
+  // Update the emoji select function with proper typing
+  const onEmojiSelect = (emoji: EmojiSelectData) => {
     setNewMessage(prev => prev + emoji.native);
     setShowEmojiPicker(false);
   };
@@ -265,7 +267,7 @@ export default function ChatPage() {
 
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-black/20 backdrop-blur-lg">
-            {groupedMessages.map((group, groupIndex) => (
+            {groupedMessages.map((group) => (
               <div key={group.date} className="space-y-4">
                 <div className="sticky top-2 flex justify-center">
                   <span className="px-3 py-1 text-xs text-purple-200 bg-black/40 rounded-full border border-purple-500/20 backdrop-blur-sm">

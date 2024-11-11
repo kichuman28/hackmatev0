@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 import { motion } from 'framer-motion';
-import { db, storage } from '@/app/lib/firebaseConfig';
+import { db} from '@/app/lib/firebaseConfig';
 import { Sparkles, Users, Filter } from 'lucide-react';
 import { Button } from "@/app/components/ui/button";
 import { TeamCard } from "@/app/components/TeamCard";
