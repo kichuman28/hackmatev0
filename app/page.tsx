@@ -162,7 +162,7 @@ export default function Home() {
                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-[#52057B] flex items-center justify-center mb-4 sm:mb-6 mx-auto">
                     {step.icon}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-center mb-3 sm:mb-4 text-white/90 bg-gradient-to-r from-[#BC6FF1] to-[#892CDC] bg-clip-text text-transparent">
+                  <h3 className="text-lg sm:text-xl font-semibold text-center mb-3 sm:mb-4 text-white/90 bg-gradient-to-r from-[#BC6FF1] to-[#892CDC] bg-clip-text">
                     {step.title}
                   </h3>
                   <p className="text-sm sm:text-base text-gray-400 text-center">{step.description}</p>

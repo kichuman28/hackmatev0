@@ -423,7 +423,7 @@ const OnboardingPage: React.FC = () => {
                 type="file"
                 onChange={handlePhotoChange}
                 accept="image/*"
-                className="w-full max-w-xs"
+                className="w-full max-w-xs bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
               />
               {renderError(errors.photo)}
             </div>
@@ -435,6 +435,7 @@ const OnboardingPage: React.FC = () => {
                   value={data.name}
                   onChange={handleChange}
                   placeholder="Your Name"
+                  className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
                 />
                 {renderError(errors.name)}
               </div>
@@ -444,12 +445,12 @@ const OnboardingPage: React.FC = () => {
                   onValueChange={(value) => handleSelectChange('college', value)}
                   value={isOtherSelected ? 'Other' : data.college}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-black/20 text-white border-purple-500/30">
                     <SelectValue placeholder="Select College" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-black/90 border-purple-500/30">
                     {COLLEGES.map(college => (
-                      <SelectItem key={college} value={college}>{college}</SelectItem>
+                      <SelectItem key={college} value={college} className="text-white hover:bg-purple-500/20">{college}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -460,6 +461,7 @@ const OnboardingPage: React.FC = () => {
                     onChange={handleOtherCollegeChange}
                     placeholder="If chosen Other, please specify"
                     disabled={!isOtherSelected}
+                    className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
                   />
                 )}
                 {renderError(errors.college)}
@@ -468,12 +470,12 @@ const OnboardingPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Select onValueChange={(value) => handleSelectChange('course', value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-black/20 text-white border-purple-500/30">
                       <SelectValue placeholder="Select Course" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-black/90 border-purple-500/30">
                       {COURSES.map(course => (
-                        <SelectItem key={course} value={course}>{course}</SelectItem>
+                        <SelectItem key={course} value={course} className="text-white hover:bg-purple-500/20">{course}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -482,12 +484,12 @@ const OnboardingPage: React.FC = () => {
 
                 <div>
                   <Select onValueChange={(value) => handleSelectChange('semester', value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-black/20 text-white border-purple-500/30">
                       <SelectValue placeholder="Select Semester" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-black/90 border-purple-500/30">
                       {SEMESTERS.map(semester => (
-                        <SelectItem key={semester} value={semester}>{semester}</SelectItem>
+                        <SelectItem key={semester} value={semester} className="text-white hover:bg-purple-500/20">{semester}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -497,12 +499,12 @@ const OnboardingPage: React.FC = () => {
 
               <div>
                 <Select onValueChange={(value) => handleSelectChange('branch', value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-black/20 text-white border-purple-500/30">
                     <SelectValue placeholder="Select Branch" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-black/90 border-purple-500/30">
                     {BRANCHES.map(branch => (
-                      <SelectItem key={branch} value={branch}>{branch}</SelectItem>
+                      <SelectItem key={branch} value={branch} className="text-white hover:bg-purple-500/20">{branch}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -521,13 +523,13 @@ const OnboardingPage: React.FC = () => {
                 value={data.bio}
                 onChange={handleChange}
                 placeholder={`Tell us about yourself (${MIN_BIO_LENGTH}-${MAX_BIO_LENGTH} characters)`}
-                className="min-h-[100px]"
+                className="min-h-[100px] bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
               />
               {renderError(errors.bio)}
             </div>
 
             <div>
-              <p className="text-sm text-muted-foreground mb-2">
+              <p className="text-sm text-white mb-2">
                 Select up to 8 skills
               </p>
               <div className="flex flex-wrap gap-2">
@@ -535,7 +537,9 @@ const OnboardingPage: React.FC = () => {
                   <Badge
                     key={skill}
                     variant={selectedSkills.includes(skill) ? "default" : "outline"}
-                    className="cursor-pointer hover:bg-primary/80"
+                    className={selectedSkills.includes(skill) 
+                      ? "bg-purple-500/20 text-purple-200 border-purple-500/30 cursor-pointer"
+                      : "border-purple-500/30 text-gray-300 cursor-pointer hover:bg-purple-500/20"}
                     onClick={() => handleSkillSelect(skill)}
                   >
                     {skill}
@@ -551,6 +555,7 @@ const OnboardingPage: React.FC = () => {
                 value={data.github}
                 onChange={handleChange}
                 placeholder="GitHub Profile URL"
+                className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
               />
               {renderError(errors.github)}
 
@@ -559,20 +564,21 @@ const OnboardingPage: React.FC = () => {
                 value={data.linkedIn}
                 onChange={handleChange}
                 placeholder="LinkedIn Profile URL"
+                className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
               />
               {renderError(errors.linkedIn)}
 
               <Select onValueChange={(value) => handleSelectChange('role', value)}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-black/20 text-white border-purple-500/30">
                   <SelectValue placeholder="Select Your Primary Role" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="frontend">Frontend Developer</SelectItem>
-                  <SelectItem value="backend">Backend Developer</SelectItem>
-                  <SelectItem value="fullstack">Full Stack Developer</SelectItem>
-                  <SelectItem value="mobile">Mobile Developer</SelectItem>
-                  <SelectItem value="devops">DevOps Engineer</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                <SelectContent className="bg-black/90 border-purple-500/30">
+                  <SelectItem value="frontend" className="text-white hover:bg-purple-500/20">Frontend Developer</SelectItem>
+                  <SelectItem value="backend" className="text-white hover:bg-purple-500/20">Backend Developer</SelectItem>
+                  <SelectItem value="fullstack" className="text-white hover:bg-purple-500/20">Full Stack Developer</SelectItem>
+                  <SelectItem value="mobile" className="text-white hover:bg-purple-500/20">Mobile Developer</SelectItem>
+                  <SelectItem value="devops" className="text-white hover:bg-purple-500/20">DevOps Engineer</SelectItem>
+                  <SelectItem value="other" className="text-white hover:bg-purple-500/20">Other</SelectItem>
                 </SelectContent>
               </Select>
               {renderError(errors.role)}
@@ -594,18 +600,21 @@ const OnboardingPage: React.FC = () => {
                     value={project.description}
                     onChange={(e) => handleProjectChange(index, 'description', e.target.value)}
                     placeholder={`Project Description (${MIN_PROJECT_DESCRIPTION_LENGTH}-${MAX_PROJECT_DESCRIPTION_LENGTH} characters)`}
+                    className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
                   />
                   
                   <Input
                     value={project.github}
                     onChange={(e) => handleProjectChange(index, 'github', e.target.value)}
                     placeholder="GitHub Repository URL"
+                    className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
                   />
                   
                   <Input
                     value={project.deployed}
                     onChange={(e) => handleProjectChange(index, 'deployed', e.target.value)}
                     placeholder="Deployed Project URL (Optional)"
+                    className="bg-black/20 text-white border-purple-500/30 focus:border-purple-500/50 placeholder:text-gray-500"
                   />
                   {renderProjectErrors(index)}
                 </div>
@@ -616,7 +625,7 @@ const OnboardingPage: React.FC = () => {
               type="button" 
               variant="outline" 
               onClick={addProject}
-              className="w-full"
+              className="w-full text-white"
             >
               Add Another Project
             </Button>
@@ -627,19 +636,19 @@ const OnboardingPage: React.FC = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium">Team Preferences</h3>
-              <p className="text-sm text-muted-foreground mb-4">Let others know about your team status</p>
+              <h3 className="text-lg font-medium text-white">Team Preferences</h3>
+              <p className="text-sm text-white mb-4">Let others know about your team status</p>
               
               <Select 
                 value={data.teamStatus} 
                 onValueChange={(value) => handleSelectChange('teamStatus', value)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-black/20 text-white border-purple-500/30">
                   <SelectValue placeholder="Select Team Status" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-black/90 border-purple-500/30">
                   {Object.entries(TEAM_STATUS).map(([key, value]) => (
-                    <SelectItem key={value} value={value}>
+                    <SelectItem key={value} value={value} className="text-white hover:bg-purple-500/20">
                       {key.charAt(0) + key.slice(1).toLowerCase().replace('_', ' ')}
                     </SelectItem>
                   ))}
@@ -647,13 +656,15 @@ const OnboardingPage: React.FC = () => {
               </Select>
 
               <div className="mt-4">
-                <p className="text-sm font-medium mb-2">Project Interests</p>
+                <p className="text-sm font-medium mb-2 text-white">Project Interests</p>
                 <div className="flex flex-wrap gap-2">
                   {PROJECT_INTERESTS.map(interest => (
                     <Badge
                       key={interest}
                       variant={data.projectInterests.includes(interest) ? "default" : "outline"}
-                      className="cursor-pointer"
+                      className={data.projectInterests.includes(interest) 
+                        ? "bg-purple-500/20 text-purple-200 border-purple-500/30 cursor-pointer"
+                        : "border-purple-500/30 text-gray-300 cursor-pointer hover:bg-purple-500/20"}
                       onClick={() => toggleArrayField('projectInterests', interest)}
                     >
                       {interest}
@@ -666,12 +677,12 @@ const OnboardingPage: React.FC = () => {
                 value={data.experienceLevel} 
                 onValueChange={(value) => handleSelectChange('experienceLevel', value)}
               >
-                <SelectTrigger className="mt-4">
+                <SelectTrigger className="mt-4 bg-black/20 text-white border-purple-500/30">
                   <SelectValue placeholder="Select Experience Level" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-black/90 border-purple-500/30">
                   {EXPERIENCE_LEVELS.map(level => (
-                    <SelectItem key={level} value={level.toLowerCase()}>
+                    <SelectItem key={level} value={level.toLowerCase()} className="text-white hover:bg-purple-500/20">
                       {level}
                     </SelectItem>
                   ))}
@@ -681,12 +692,12 @@ const OnboardingPage: React.FC = () => {
                 value={data.preferredTeamSize} 
                 onValueChange={(value) => handleSelectChange('preferredTeamSize', value)}
               >
-                <SelectTrigger className="mt-4">
+                <SelectTrigger className="mt-4 bg-black/20 text-white border-purple-500/30">
                   <SelectValue placeholder="Preferred Team Size" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-black/90 border-purple-500/30">
                   {TEAM_SIZES.map(size => (
-                    <SelectItem key={size.value} value={size.value}>
+                    <SelectItem key={size.value} value={size.value} className="text-white hover:bg-purple-500/20">
                       {size.label}
                     </SelectItem>
                   ))}
@@ -719,10 +730,10 @@ const OnboardingPage: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="w-full max-w-[500px]">
+      <Card className="w-full max-w-[500px] bg-black/30 backdrop-blur-lg border-[#52057B]/20">
         <CardHeader>
-          <CardTitle>Complete Your Profile</CardTitle>
-          <CardDescription>Step {step} of 4</CardDescription>
+          <CardTitle className="text-white">Complete Your Profile</CardTitle>
+          <CardDescription className="text-gray-400">Step {step} of 4</CardDescription>
         </CardHeader>
         <CardContent>
           {renderStep()}
@@ -733,6 +744,7 @@ const OnboardingPage: React.FC = () => {
                 variant="outline"
                 onClick={() => setStep(step - 1)}
                 disabled={isSubmitting}
+                className="border-purple-500/30 text-white hover:bg-purple-500/20"
               >
                 Previous
               </Button>
@@ -742,6 +754,7 @@ const OnboardingPage: React.FC = () => {
                 <Button
                   onClick={() => handleStepChange(step + 1)}
                   disabled={isSubmitting}
+                  className="primary-button"
                 >
                   Next
                 </Button>
@@ -749,6 +762,7 @@ const OnboardingPage: React.FC = () => {
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
+                  className="primary-button"
                 >
                   {isSubmitting ? "Saving..." : "Complete"}
                 </Button>
