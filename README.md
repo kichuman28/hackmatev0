@@ -4,7 +4,7 @@
 
 Hackmate is a platform designed to help college students and hackathon participants connect with teammates based on skills and shared interests. The application allows users to search for and message potential teammates, with a focus on connecting students from the same college or university.
 
-![image](https://github.com/user-attachments/assets/336a26dd-e00d-4085-8236-c55e11de5409)
+![image](https://github.com/user-attachments/assets/6c735f25-c4d2-4d41-8c6d-1945612e4ef5)
 
 ![image](https://github.com/user-attachments/assets/bc679f89-e38f-499a-9431-fc1ae5fc5607)
 ![image](https://github.com/user-attachments/assets/b0aeb025-d806-446d-9304-12b8150a7aa6)
